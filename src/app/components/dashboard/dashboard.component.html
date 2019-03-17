@@ -1,0 +1,70 @@
+<!-- Top navigation -->
+<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+  <a class="navbar-brand col-sm-4 col-md-4 mr-0" routerLink="/register-student">
+    <h1 class='titre_home'>Firechat</h1>
+  </a>
+</nav>
+
+<!-- Sidebar navigation -->
+<div class="container-fluid">
+  <div class="row">
+
+    <nav class="col-md-2 d-md-block bg-light sidebar">
+      <div class="sidebar-sticky">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active">
+              <i class="fas fa-envelope"></i>Message
+            </a>
+          </li>
+          <!-- Calling SignOut() Api from AuthService -->
+          <li class="nav-item">
+            <a class="nav-link" (click)="authService.SignOut()">
+              <i class="fas fa-sign-out-alt"></i>Log out
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Main content -->
+    <div role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+      <div class="inner-adjust">
+
+        <div class="messaging">
+
+              <div class="mesgs">
+                <div id="msg_history" class="msg_history" #scrollMe [scrollTop]="scrollMe.scrollHeight">
+                  <div *ngFor="let message of messages$ | async">
+                  <div *ngIf="message.id_user != authService.userData.uid" class="incoming_msg">
+                    <div class="incoming_msg_img"> <img src="{{(message.photo) ? message.photo : '/assets/dummy-user.png'}}" alt="sunil"> </div>
+                    <div class="received_msg">
+                      <div class="received_withd_msg">
+                        <div class="nae_user">{{message.name}}</div>
+                        <p>
+                        {{message.msg}}
+                        </p>
+                        <span class="time_date">{{message.date_env | timeAgo}}</span></div>
+                    </div>
+                  </div>
+                  <div *ngIf="message.id_user === authService.userData.uid" class="outgoing_msg">
+                    <div class="sent_msg">
+                      <p>{{message.msg}}</p>
+                      <span class="time_date">{{message.date_env | timeAgo}}</span><a (click)="deleteMsg(message)" title="Delete" class="delete_msg"> - Delete </a> </div>
+                  </div>
+                  </div>
+
+              </div>
+
+            <div class="type_msg">
+                <div class="input_msg_write">
+                  <input [(ngModel)]="msg" [value]="msg" type="text" class="write_msg" placeholder="Type a message" (keydown.enter)="sendMessage(msg)" />
+                  <button class="msg_send_btn" type="button" (click)="sendMessage(msg)"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                </div>
+              </div>
+            </div>
+      </div>
+    </div>
+
+  </div>
+</div>
